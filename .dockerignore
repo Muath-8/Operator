@@ -1,0 +1,15 @@
+**/node_modules
+**/.next
+**/.local
+**/.env
+**/.env.*
+!.env.example
+**/coverage
+**/test-results
+**/playwright-report
+.git
+prototypes
+briefs
+brand
+docs
+**/*.log

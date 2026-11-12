@@ -1,0 +1,23 @@
+{
+  "name": "@lo/voice",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "start": "tsx src/server.ts",
+    "test": "vitest run src"
+  },
+  "dependencies": {
+    "@lo/runtime": "workspace:*",
+    "@lo/state": "workspace:*",
+    "@lo/policy": "workspace:*",
+    "@lo/adapters": "workspace:*",
+    "zod": "4.6.7",
+    "ws": "8.22.2",
+    "tsx": "4.20.3"
+  },
+  "devDependencies": {
+    "@types/ws": "8.18.2"
+  }
+}

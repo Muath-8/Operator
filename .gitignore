@@ -1,0 +1,37 @@
+.DS_Store
+__pycache__/
+*.pyc
+node_modules/
+.env
+.env.*
+!.env.example
+.next/
+dist/
+coverage/
+test-results/
+playwright-report/
+.local/
+*.tsbuildinfo
+.opus-worker.log
+
+.opus-followup.log
+.local-web-build.log
+.next-*/
+.inngest/
+apps/web/src/lib/mission-view-validator.js
+
+apps/web/next-env.d.ts
+
+# Loose local process logs; preserved under .local/logs when organised.
+/*.log
+
+!.env.*.example
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+
+# Private planning and design materials are excluded from publication.
+/brand/
+/briefs/
+/docs/
+/prototypes/

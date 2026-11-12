@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@lo/state": ["./packages/state/src/index.ts"],
+      "@lo/policy": ["./packages/policy/src/index.ts"],
+      "@lo/adapters": ["./packages/adapters/src/index.ts"],
+      "@lo/runtime": ["./apps/runtime/src/index.ts"],
+      "@lo/evals": ["./packages/evals/src/index.ts"]
+    }
+  },
+  "include": ["apps/**/*.ts", "apps/**/*.tsx", "packages/**/*.ts", "scripts/**/*.ts"],
+  "exclude": ["node_modules", "**/.next", "**/dist"]
+}

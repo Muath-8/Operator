@@ -1,0 +1,94 @@
+name: Local implementation quality
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      full_release_validation:
+        description: 'Run full release gates (requires private specifications and reviewed visual baselines)'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  local-prototype:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:local
+      - run: pnpm typecheck
+      - run: pnpm quality:security
+      - run: pnpm --filter @lo/web build
+  correctness:
+    if: github.event_name == 'workflow_dispatch' && inputs.full_release_validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test-only-local-database
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      LO_DATABASE_URL: postgresql://postgres:test-only-local-database@127.0.0.1:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm lint:css
+      - run: pnpm quality:tokens
+      - run: pnpm quality:copy
+      - run: pnpm format:check
+      - run: pnpm quality:security
+      - run: pnpm quality:traceability
+      - run: pnpm test:coverage --maxWorkers=1
+      - run: pnpm build
+      - run: pnpm audit --audit-level high
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: correctness-evidence
+          path: |
+            coverage/
+            .local/quality/
+  browser:
+    if: github.event_name == 'workflow_dispatch' && inputs.full_release_validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      # Deliberately requires reviewed baselines. Missing baselines are a failed gate.
+      - run: pnpm test:ui
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence
+          path: apps/web/tests/ui/test-results/

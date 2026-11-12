@@ -1,0 +1,461 @@
+/* Shell: strip (32), rail (48), page (680), composer, banners, palette. */
+.app {
+  display: grid;
+  grid-template-rows: var(--strip) auto 1fr;
+  block-size: 100vh;
+  block-size: 100dvh;
+  overflow: hidden;
+}
+.below {
+  display: flex;
+  min-block-size: 0;
+  position: relative;
+}
+
+/* status strip: name, working line, two mandate meters. Nothing else, ever. */
+.strip {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-inline-end: var(--sp-3);
+  border-block-end: var(--stroke) solid var(--rule);
+  background: var(--side);
+  min-inline-size: 0;
+  font-size: var(--f1);
+  position: relative;
+  z-index: var(--z-strip);
+}
+.strip .mn {
+  font-weight: var(--w-medium);
+  font-size: var(--f1);
+  white-space: nowrap;
+  color: var(--ink);
+  padding-inline: var(--sp-2);
+  block-size: var(--g-chip);
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--r-btn);
+  margin-inline-start: var(--sp-2);
+}
+.strip .mn:hover {
+  background: var(--wash);
+}
+.strip .mbtn {
+  display: none;
+  align-items: center;
+  gap: var(--sp-05);
+  block-size: var(--target);
+  min-inline-size: var(--target);
+  padding-inline: var(--sp-15);
+  border-radius: var(--r-btn);
+  color: var(--ink);
+}
+.strip .mbtn .chev90 {
+  inline-size: var(--glyph);
+  block-size: var(--glyph);
+  transform: rotate(90deg);
+  color: var(--ink-3);
+}
+.working {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--ink-2);
+  min-inline-size: 0;
+  flex: 1;
+}
+.working span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: fadein var(--base) var(--ease);
+}
+/* The label stays whole; the server text truncates at its own end, whatever its direction. */
+.working > span {
+  display: flex;
+  align-items: baseline;
+  min-inline-size: 0;
+}
+.working .wt {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-inline-start: var(--sp-1);
+}
+.dot {
+  inline-size: var(--g-status-dot);
+  block-size: var(--g-status-dot);
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+  position: relative;
+}
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--sp-1) * -1);
+  border-radius: 50%;
+  border: var(--stroke) solid var(--accent);
+  opacity: 0;
+  animation: breathe var(--breath) var(--ease) infinite;
+}
+.dot.idle,
+.dot.paused {
+  background: var(--ink-3);
+}
+.dot.waiting {
+  background: transparent;
+  box-shadow: inset 0 0 0 var(--stroke-15) var(--ink-3);
+}
+.dot.blocked {
+  background: var(--t-claimed);
+}
+.dot.idle::after,
+.dot.paused::after,
+.dot.waiting::after,
+.dot.blocked::after {
+  display: none;
+}
+@keyframes breathe {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.meter {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  block-size: var(--g-chip);
+  padding-inline: var(--sp-2);
+  border-radius: var(--r-btn);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.meter:hover {
+  background: var(--wash);
+  color: var(--ink);
+}
+.meter .bar {
+  inline-size: var(--g-meter);
+  block-size: var(--g-bar);
+  border-radius: var(--r-bar);
+  background: var(--rule-2);
+  overflow: hidden;
+  position: relative;
+}
+.meter .bar i {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  background: var(--ink-2);
+  border-radius: var(--r-bar);
+  transition: inline-size var(--slow) var(--ease);
+}
+.meter.near .bar i {
+  background: var(--t-claimed);
+}
+.meter.pending .bar {
+  background: transparent;
+  box-shadow: inset 0 0 0 var(--stroke) var(--rule-2);
+  background-image: repeating-linear-gradient(90deg, var(--rule-2) 0 var(--hatch), transparent var(--hatch) var(--hatch-gap));
+}
+.meter.revoked {
+  opacity: 0.55;
+}
+.meter.revoked b {
+  text-decoration: line-through;
+}
+.meter b {
+  font-weight: var(--w-medium);
+  color: var(--ink);
+}
+.meter em {
+  font-style: normal;
+  color: var(--t-claimed);
+}
+
+/* banners: sandbox, paused, offline, permission. Text, never colour alone. */
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-15) var(--sp-4);
+  font-size: var(--f1);
+  color: var(--ink);
+  background: var(--wash);
+  border-block-end: var(--stroke) solid var(--rule);
+}
+.banner .ico {
+  color: var(--ink-2);
+}
+.banner.sandbox {
+  background: var(--accent-wash);
+}
+.banner.warn .ico {
+  color: var(--t-claimed);
+}
+.banner .grow {
+  flex: 1;
+}
+
+/* rail */
+.rail {
+  inline-size: var(--rail);
+  flex: none;
+  background: var(--side);
+  border-inline-end: var(--stroke) solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: var(--sp-3);
+  gap: var(--sp-2);
+  list-style: none;
+}
+.rail .ms {
+  inline-size: var(--control);
+  block-size: var(--control);
+  border-radius: var(--r-block);
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+  position: relative;
+  transition:
+    background var(--fast) var(--ease),
+    color var(--fast) var(--ease);
+}
+.rail .ms:hover {
+  background: var(--wash);
+  color: var(--ink);
+}
+.rail .ms[aria-current='page'] {
+  background: var(--paper);
+  box-shadow: 0 0 0 var(--stroke) var(--rule-2);
+  color: var(--ink);
+}
+.rail .ms .pip {
+  position: absolute;
+  inset-block-start: var(--sp-125);
+  inset-inline-end: var(--sp-125);
+  inline-size: var(--g-dot);
+  block-size: var(--g-dot);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 var(--stroke-2) var(--side);
+}
+.rail .ms.paused {
+  opacity: 0.6;
+}
+
+/* main column and page */
+.main {
+  flex: 1;
+  min-inline-size: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  transition: margin var(--slow) var(--ease);
+}
+.app.peeking .main {
+  margin-inline-end: var(--peek);
+}
+.page {
+  max-inline-size: var(--col);
+  margin-inline: auto;
+  padding: var(--sp-12) var(--sp-12) var(--g-clear);
+}
+
+/* composer and inline matches */
+.composer {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline-start: var(--rail);
+  inset-inline-end: 0;
+  z-index: var(--z-composer);
+  pointer-events: none;
+  transition: inset-inline-end var(--slow) var(--ease);
+}
+.app.peeking .composer {
+  inset-inline-end: var(--peek);
+}
+.composer .inner {
+  max-inline-size: var(--col);
+  margin-inline: auto;
+  padding: var(--sp-6) var(--sp-12) var(--sp-5);
+  background: linear-gradient(to bottom, transparent, var(--paper) var(--g-fade));
+  pointer-events: auto;
+  position: relative;
+}
+.cbox {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  border: var(--stroke) solid var(--rule-2);
+  border-radius: var(--r-block);
+  background: var(--paper);
+  padding: var(--sp-15);
+  padding-inline-start: var(--sp-35);
+  transition:
+    border-color var(--fast) var(--ease),
+    box-shadow var(--fast) var(--ease);
+}
+.cbox:focus-within {
+  border-color: var(--ink-3);
+  box-shadow: 0 0 0 var(--stroke-3) var(--accent-wash);
+}
+.cbox input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  block-size: var(--g-send);
+  font-size: var(--f3);
+  min-inline-size: 0;
+}
+.cbox input::placeholder {
+  color: var(--ink-3);
+}
+.send {
+  inline-size: var(--g-send);
+  block-size: var(--g-send);
+  border-radius: var(--r-send);
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--on-ink);
+  transition: opacity var(--fast) var(--ease);
+}
+.cnote {
+  margin-block-start: var(--sp-15);
+  font-size: var(--f1);
+  color: var(--ink-2);
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+}
+.cnote.err {
+  color: var(--t-failed);
+}
+/* A spinner leads its line; the centring margin it carries inside buttons would push the text away. */
+.cnote .spin {
+  margin: 0;
+  flex: none;
+}
+.power {
+  position: absolute;
+  inset-inline: var(--sp-12);
+  inset-block-end: calc(100% - var(--sp-5));
+  background: var(--paper);
+  border-radius: var(--r-block);
+  box-shadow: var(--lift);
+  padding: var(--sp-15);
+  list-style: none;
+}
+.grp {
+  font-size: var(--f1);
+  color: var(--ink-3);
+  padding: var(--sp-15) var(--sp-25) var(--sp-05);
+}
+.it {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-btn);
+  font-size: var(--f2);
+  cursor: pointer;
+}
+.it .ico {
+  color: var(--ink-2);
+}
+.it .hint {
+  margin-inline-start: auto;
+  font-size: var(--f1);
+  color: var(--ink-3);
+  display: flex;
+  gap: var(--sp-1);
+  align-items: center;
+}
+.it[aria-selected='true'] {
+  background: var(--wash);
+}
+
+/* palette */
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--scrim);
+  z-index: var(--z-scrim);
+  animation: fadein var(--fast) var(--ease);
+}
+.pal {
+  position: fixed;
+  z-index: var(--z-modal);
+  inset-block-start: 14vh;
+  inset-inline: 0;
+  margin-inline: auto;
+  inline-size: min(var(--g-palette), calc(100vw - var(--sp-8)));
+  background: var(--paper);
+  border-radius: var(--r-sheet);
+  box-shadow: var(--lift);
+  overflow: hidden;
+  animation: fadein var(--fast) var(--ease);
+}
+.pal input {
+  inline-size: 100%;
+  block-size: var(--g-palette-input);
+  border: 0;
+  outline: 0;
+  padding-inline: var(--sp-5);
+  font-size: var(--f3);
+  border-block-end: var(--stroke) solid var(--rule);
+  background: transparent;
+}
+.pal ul {
+  list-style: none;
+  max-block-size: min(var(--g-palette-list), 60vh);
+  overflow-y: auto;
+  padding: var(--sp-15);
+}
+.pal .grp {
+  padding: var(--sp-25) var(--sp-3) var(--sp-1);
+}
+.pal .empty-row {
+  padding: var(--sp-3);
+  color: var(--ink-3);
+  font-size: var(--f2);
+}
+
+/* tooltip host, live region */
+.live {
+  position: absolute;
+  inline-size: var(--g-hair);
+  block-size: var(--g-hair);
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+/* The local-testing notice occupies its own row without obscuring the workspace. */
+.local-testing-workspace {
+  display: flex;
+  flex-direction: column;
+  block-size: 100dvh;
+}
+.local-testing-workspace > .app {
+  flex: 1;
+  min-block-size: 0;
+  block-size: auto;
+}
+.local-testing-workspace > .banner {
+  flex: none;
+  flex-wrap: wrap;
+}

@@ -1,0 +1,330 @@
+/* Pages outside a mission (sign-in, onboarding, public validation) and modal dialogs. Tokens only. */
+.pub {
+  display: grid;
+  grid-template-rows: var(--strip) 1fr;
+  min-block-size: 100dvh;
+}
+.pub-strip {
+  padding-inline: var(--sp-2) var(--sp-3);
+}
+.pub-strip .mn {
+  margin-inline-start: 0;
+}
+.pub-strip .mn:hover {
+  background: none;
+}
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--ink);
+  white-space: nowrap;
+  direction: ltr;
+  flex-shrink: 0;
+}
+.brand-lockup svg {
+  inline-size: var(--g-option-mark);
+  block-size: auto;
+  fill: currentColor;
+}
+.brand-wordmark {
+  font: var(--w-regular) var(--f5) / var(--lh-title) var(--serif);
+  letter-spacing: var(--track-title);
+}
+.pub-main {
+  overflow-y: auto;
+}
+.pub-page {
+  padding-block-end: var(--sp-12);
+}
+.pub-lede {
+  margin-block-start: var(--sp-6);
+}
+.pub-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  margin-block-start: var(--sp-8);
+  max-inline-size: var(--g-form);
+}
+.pub-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin-block-start: var(--sp-6);
+}
+.pub-form .pub-block {
+  margin-block-start: 0;
+}
+.pub-form.pub-block {
+  margin-block-start: var(--sp-8);
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  inline-size: 100%;
+  font-size: var(--f1);
+  color: var(--ink-2);
+}
+.field input {
+  block-size: var(--target);
+  border: var(--stroke) solid var(--rule-2);
+  border-radius: var(--r-btn);
+  padding-inline: var(--sp-3);
+  font-size: var(--f3);
+  background: var(--paper);
+  color: var(--ink);
+  inline-size: 100%;
+}
+.field input:focus {
+  outline: var(--focus-ring) solid var(--accent);
+  outline-offset: var(--focus-offset-tight);
+}
+.field input[aria-invalid='true'],
+.check input[aria-invalid='true'] {
+  outline: var(--focus-ring) solid var(--t-failed);
+  outline-offset: var(--focus-offset-tight);
+}
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  font-size: var(--f2);
+  color: var(--ink);
+  cursor: pointer;
+  margin-block-start: var(--sp-3);
+}
+.check input {
+  inline-size: var(--icon);
+  block-size: var(--icon);
+  margin-block-start: var(--sp-05);
+  flex: none;
+  accent-color: var(--ink);
+}
+.hp {
+  position: absolute;
+  inline-size: var(--g-hair);
+  block-size: var(--g-hair);
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.sandbox-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--r-chip);
+  background: var(--accent-wash);
+  color: var(--ink);
+  font-size: var(--f1);
+  margin-block-end: var(--sp-4);
+}
+.pub-strip .sandbox-tag {
+  margin: 0;
+}
+.pub-done {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-8);
+  font: var(--w-regular) var(--f4) / var(--lh-read) var(--serif);
+}
+.pub-done .ico {
+  color: var(--t-verified);
+}
+.pub-img {
+  display: block;
+  inline-size: 100%;
+  max-block-size: var(--g-public-img);
+  object-fit: cover;
+  border-radius: var(--r-block);
+  margin-block-start: var(--sp-6);
+  background: var(--wash);
+}
+.nf-code {
+  font: var(--w-regular) var(--f1) / 1 var(--sans);
+  color: var(--ink-3);
+  letter-spacing: var(--track-code);
+  margin-block-end: var(--sp-3);
+}
+a.btn {
+  text-decoration: none;
+}
+.pub-foot {
+  margin-block-start: var(--sp-8);
+  font-size: var(--f2);
+}
+
+/* accounts peek */
+.accts {
+  list-style: none;
+  margin-block-start: var(--sp-5);
+}
+.acct {
+  padding-block: var(--sp-3);
+  border-block-start: var(--stroke) solid var(--rule);
+  font-size: var(--f2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-05);
+}
+.acct.revoked {
+  color: var(--ink-3);
+}
+.acct-h {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.acct-h b {
+  font-weight: var(--w-medium);
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.acct-st {
+  font-size: var(--f1);
+  color: var(--ink-2);
+}
+.acct-st.ok {
+  color: var(--t-verified);
+}
+.acct-st.wait {
+  color: var(--t-claimed);
+}
+.acct-tag {
+  margin-inline-start: var(--sp-2);
+  padding: 0 var(--sp-1);
+  border-radius: var(--r-chip);
+  background: var(--accent-wash);
+  color: var(--ink);
+  font-size: var(--f1);
+  font-weight: var(--w-regular);
+}
+.shop {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  max-inline-size: var(--g-form);
+  margin-block-end: var(--sp-5);
+}
+.shop-h {
+  font-size: var(--f2);
+  font-weight: var(--w-medium);
+}
+.shop .check {
+  margin-block-start: 0;
+}
+.acct-d {
+  font-size: var(--f1);
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.acct .acts {
+  display: flex;
+  gap: var(--sp-1);
+  flex-wrap: wrap;
+  margin-block-start: var(--sp-2);
+}
+.acct-confirm p {
+  margin-block-start: var(--sp-2);
+  font-size: var(--f2);
+  unicode-bidi: plaintext;
+}
+.acc-note {
+  font-size: var(--f2);
+  color: var(--ink-2);
+  max-inline-size: var(--measure-peek);
+}
+
+/* modal dialog (deletion) */
+.dlg {
+  position: fixed;
+  z-index: var(--z-modal);
+  inset-block-start: 10vh;
+  inset-inline: 0;
+  margin-inline: auto;
+  inline-size: min(var(--g-dialog), calc(100vw - var(--sp-8)));
+  max-block-size: 80vh;
+  overflow-y: auto;
+  background: var(--paper);
+  border-radius: var(--r-sheet);
+  box-shadow: var(--lift);
+  padding: var(--sp-6);
+  animation: fadein var(--fast) var(--ease);
+}
+.dlg h2 {
+  font: var(--w-medium) var(--f5) / var(--lh-title) var(--serif);
+  unicode-bidi: plaintext;
+}
+.dlg h2:focus {
+  outline: none;
+}
+.dlg .lead,
+.keep li,
+.dlg .cnote,
+.check span {
+  unicode-bidi: plaintext;
+}
+.dlg .lead {
+  margin-block-start: var(--sp-2);
+  color: var(--ink-2);
+  font-size: var(--f2);
+}
+.dlg h3 {
+  font-size: var(--f1);
+  font-weight: var(--w-medium);
+  color: var(--ink-3);
+  margin-block: var(--sp-5) var(--sp-2);
+}
+.dlg-note {
+  margin-block-start: var(--sp-3);
+  font-size: var(--f2);
+  color: var(--ink);
+}
+.keep {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: var(--f2);
+  border-block-start: var(--stroke) solid var(--rule);
+  padding-block-start: var(--sp-2);
+}
+.keep b {
+  font-weight: var(--w-medium);
+}
+.dlg-acts {
+  display: flex;
+  gap: var(--sp-1);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-block-start: var(--sp-6);
+}
+
+@media (max-width: 899px) {
+  .pub-strip {
+    padding-inline: var(--sp-3);
+  }
+  /* Outside a mission there is no mission-mark button: keep the name visible on phones. */
+  .strip.pub-strip .mn {
+    display: inline-flex;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dlg {
+    inset-block: auto 0;
+    inline-size: 100%;
+    max-block-size: 88dvh;
+    border-radius: var(--r-sheet) var(--r-sheet) 0 0;
+  }
+  .dlg-acts .btn,
+  .check {
+    min-block-size: var(--target);
+  }
+}

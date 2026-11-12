@@ -1,0 +1,10 @@
+node_modules
+.next*
+.local
+dist
+coverage
+test-results
+playwright-report
+mission-view-validator.js
+pnpm-lock.yaml
+prototypes

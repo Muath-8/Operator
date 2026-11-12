@@ -1,0 +1,169 @@
+/* Additions for the production components (structure the prototype did not need). */
+/* Programmatic focus targets (not in the tab order) need no ring; controls inside keep theirs. */
+.peek:focus,
+.pb h2[tabindex='-1']:focus {
+  outline: none;
+}
+.dialbox {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  align-items: flex-start;
+}
+.ico.back {
+  transform: scaleX(-1);
+}
+[dir='rtl'] .ico.back {
+  transform: none;
+}
+/* Mixed-direction runs inside flex items resolve their own direction (server text may be English in an Arabic page). */
+.prose p,
+.why p,
+.lead,
+.ask .done,
+.working bdi,
+.fx > span,
+.embed .et,
+.embed .es,
+.status,
+.cnote {
+  unicode-bidi: plaintext;
+}
+.entry > div:empty {
+  display: none;
+}
+.fig {
+  white-space: nowrap;
+}
+.corr {
+  text-decoration: none;
+  background: var(--accent-wash);
+  padding: 0 var(--sp-075);
+  border-radius: var(--r-mark);
+}
+.term {
+  font: inherit;
+  color: inherit;
+  padding: 0;
+}
+.evl ul {
+  list-style: none;
+}
+.eb {
+  block-size: var(--g-bar);
+  border-radius: var(--r-bar);
+  background: var(--wash);
+  overflow: hidden;
+  display: flex;
+}
+.eb i {
+  block-size: 100%;
+}
+.eb .s {
+  background: var(--ink);
+}
+.eb .f {
+  background: var(--rule-2);
+}
+.env-bar {
+  display: block;
+}
+table.tt td.ev {
+  white-space: nowrap;
+  color: var(--ink-2);
+}
+table.tt td.ev.bad {
+  color: var(--t-claimed);
+}
+.props .budget {
+  font: inherit;
+  color: inherit;
+}
+.ms.busy {
+  opacity: 0.6;
+}
+.status {
+  font-size: var(--f1);
+  color: var(--ink-2);
+}
+
+/* the auto peek (agent focus on load) only shows where there is room beside the page */
+@media (max-width: 1279px) {
+  .peek.auto {
+    display: none;
+  }
+  .app.peeking .main {
+    margin-inline-end: 0;
+  }
+}
+@media (min-width: 1280px) {
+  .embed.in-peek {
+    display: none;
+  }
+}
+
+/* canvas structure */
+.cvwrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.fin {
+  position: relative;
+}
+[dir='rtl'] .flabel {
+  transform-origin: 100% 100%;
+}
+[dir='rtl'] .pin {
+  transform: translate(-50%, -50%) scale(var(--iz, 1));
+}
+.cpins {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.cpins .cpin {
+  pointer-events: auto;
+}
+.frame .fsel {
+  inline-size: 100%;
+  block-size: 100%;
+}
+.cv:focus-visible {
+  outline: var(--focus-ring) solid var(--accent);
+  outline-offset: calc(var(--stroke-2) * -1);
+}
+
+/* phone canvas: frames stacked in one column, fitted by width; select to inspect */
+.cv.phone {
+  overflow-y: auto;
+  overflow-x: hidden;
+  touch-action: pan-y;
+  padding: var(--sp-10) var(--sp-3) var(--sp-12);
+  background-size: var(--grid) var(--grid);
+}
+.cv.phone .world {
+  position: static;
+  transform: none;
+}
+.cv.phone .frame {
+  position: relative;
+  inline-size: 100%;
+  margin-block-end: var(--sp-14);
+  transform: none;
+}
+.cv.phone .flabel {
+  transform: none;
+  max-inline-size: 100%;
+}
+.cv.phone .pin {
+  transform: translate(50%, -50%);
+}
+[dir='rtl'] .cv.phone .pin {
+  transform: translate(-50%, -50%);
+}
+.cv.phone .tt {
+  display: block;
+  overflow-x: auto;
+}

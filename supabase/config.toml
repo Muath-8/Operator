@@ -1,0 +1,7 @@
+project_id = "launch-operator"
+[db]
+major_version = 15
+[realtime]
+enabled = true
+[storage]
+enabled = true

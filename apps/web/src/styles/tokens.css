@@ -1,0 +1,284 @@
+/* =====================================================================
+   Launch Operator design tokens (UX 9). One system, two themes.
+   The only file allowed to hold literal colours, sizes and durations.
+   Six type sizes: 12 / 14 / 16 / 19 / 24 / 40. 4px grid. One accent.
+   Semantic colour only on trust and readiness.
+   ===================================================================== */
+:root {
+  /* surfaces and ink (light, default) */
+  --paper: #ffffff;
+  --side: #f7f7f5;
+  --wash: #f0f0ed;
+  --rule: #e4e4e0;
+  --rule-2: #d2d2cd;
+  --ink: #1b1c1e;
+  --ink-2: #4d5158;
+  --ink-3: #686c73;
+  --on-ink: #ffffff;
+  --accent: #2d3fa8;
+  --on-accent: #ffffff;
+  --accent-wash: #eceefa;
+  --accent-line: rgb(45 63 168 / 0.32);
+  --stage: #f2f2ef;
+  --stage-dot: #d6d6d0;
+  --scrim: rgb(20 20 24 / 0.18);
+  --sheen: rgb(255 255 255 / 0.55);
+  --gloss: rgb(255 255 255 / 0.6);
+
+  /* plate materials: names, not product categories */
+  --mat-glass: #ffffff;
+  --mat-leather: #c9a27a;
+  --mat-metal: #b9975a;
+  --mat-wax: #f4eee2;
+  --mat-wood: #d9c3a3;
+  --mat-paper: #fbfaf7;
+
+  /* trust (semantic) */
+  --t-planned: #686c73;
+  --t-performed: #3b424c;
+  --t-claimed: #9a5800;
+  --t-verified: #1d7449;
+  --t-founder: #6e3d9c;
+  --t-failed: #b3261e;
+
+  /* type */
+  /* next/font sets --font-*; Naskh sits in both stacks so Arabic never falls to a system face */
+  --serif:
+    var(--font-newsreader, 'Newsreader'), var(--font-naskh, 'Noto Naskh Arabic'), 'Iowan Old Style', 'Charter', 'Bitstream Charter',
+    'Sitka Text', Georgia, serif;
+  --sans:
+    var(--font-geist, 'Geist'), var(--font-naskh, 'Noto Naskh Arabic'), 'Inter', 'Segoe UI', -apple-system, system-ui, 'Helvetica Neue',
+    Arial, sans-serif;
+  --arabic: var(--font-naskh, 'Noto Naskh Arabic'), 'Geeza Pro', 'Arabic Typesetting', 'Times New Roman', serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --f1: 12px;
+  --f2: 14px;
+  --f3: 16px;
+  --f4: 19px;
+  --f5: 24px;
+  --f6: 40px;
+  --lh-prose: 1.45;
+  --lh-read: 1.6;
+  --lh-title: 1.2;
+  --w-regular: 400;
+  --w-medium: 500;
+  --w-strong: 600;
+
+  /* space: 4px grid */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 28px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-14: 56px;
+  --sp-16: 64px;
+  /* fractions of the unit: optical alignment inside small controls only */
+  --sp-025: 1px;
+  --sp-05: 2px;
+  --sp-075: 3px;
+  --sp-125: 5px;
+  --sp-15: 6px;
+  --sp-25: 10px;
+  --sp-35: 14px;
+  --sp-45: 18px;
+  --sp-65: 26px;
+  --sp-9: 36px;
+
+  /* radii */
+  --r-tick: 1px;
+  --r-bar: 2px;
+  --r-mark: 3px;
+  --r-chip: 4px;
+  --r-btn: 6px;
+  --r-send: 7px;
+  --r-block: 8px;
+  --r-sheet: 12px;
+  --r-pill: 999px;
+
+  /* strokes and focus */
+  --stroke-15: 1.5px;
+  --stroke-2: 2px;
+  --stroke-3: 3px;
+  --stroke-5: 5px;
+  --focus-ring: 2px;
+  --focus-offset: 2px;
+  --focus-offset-tight: 1px;
+  --ring-flash: 10px;
+  --hatch: 2px;
+  --hatch-gap: 4px;
+  --hatch-gap-wide: 5px;
+
+  /* tracking and fixed leading */
+  --track-display: -0.015em;
+  --track-title: -0.01em;
+  --track-lede: -0.005em;
+  --track-mark: 0.02em;
+  --track-code: 0.08em;
+  --lh-label: 16px;
+  --lh-arabic: 1.7;
+  --measure-lede: 30em;
+  --measure: 62ch;
+  --measure-wide: 64ch;
+  --measure-peek: 60ch;
+  --measure-narrow: 32ch;
+
+  /* structural geometry (g-*): component sizes that are not spacing */
+  --g-hair: 1px;
+  --g-tick: 2px;
+  --g-bar-thin: 3px;
+  --g-bar: 4px;
+  --g-dot: 6px;
+  --g-status-dot: 7px;
+  --g-mark: 14px;
+  --g-chapter-indent: 11px; /* centres the chapter rule under its toggle chevron */
+  --g-option-mark: 20px;
+  --g-pin-sm: 22px;
+  --g-chip: 24px;
+  --g-send: 30px;
+  --g-meter: 40px;
+  --g-meter-phone: 20px;
+  --g-header: 44px;
+  --g-zoom-readout: 44px;
+  --g-palette-input: 52px;
+  --g-swatch-w: 30px;
+  --g-swatch-h: 44px;
+  --g-thumb-w: 112px;
+  --g-thumb-w-phone: 96px;
+  --g-thumb-h: 64px;
+  --g-figure-min: 76px;
+  --g-progress-min: 56px;
+  --g-progress-max: 160px;
+  --g-lean-min: 96px;
+  --g-label-col: 132px;
+  --g-time-col: 56px;
+  --g-env-amount: 96px;
+  --g-env-bar: 132px;
+  --g-env-amount-phone: 56px;
+  --g-env-bar-phone: 96px;
+  --g-gallery: 180px;
+  --g-sk-plates: 300px;
+  --g-sk-plates-phone: 200px;
+  --g-sk-body: 260px;
+  --g-direction-art: 240px;
+  --g-shelf-art: 220px;
+  --g-shelf-lift: 14px;
+  --g-select-max: 240px;
+  --g-tip: 300px;
+  --g-public-img: 360px;
+  --g-form: 440px;
+  --g-dialog: 560px;
+  --g-palette: 600px;
+  --g-palette-list: 440px;
+  --g-caret-h: 1em;
+  --g-clear: 184px;
+  --g-clear-phone: 168px;
+  --g-fade: 28px;
+  --grid: 24px;
+  --grid-dot: 1px;
+  --grid-dot-fade: 1.2px;
+
+  /* layout */
+  --strip: 32px;
+  --rail: 48px;
+  --col: 680px;
+  --peek: 620px;
+  --peek-wide: min(980px, calc(100vw - var(--rail) - 96px));
+  --inspector: 264px;
+  --target: 40px;
+  --control: 32px;
+  --control-sm: 28px;
+  --glyph: 12px;
+  --icon: 16px;
+  --stroke: 1px;
+
+  /* motion: three durations, one easing */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --fast: 120ms;
+  --base: 180ms;
+  --slow: 240ms;
+  --breath: 2000ms;
+  --blink: 1000ms;
+  --sheen-cycle: 1200ms;
+  --spin-cycle: 800ms;
+  --flash: 1000ms;
+  --instant: 0.001ms;
+  --stagger: 70ms;
+  /* motion travel: entrance offsets */
+  --m-nudge: 3px;
+  --m-rise: 4px;
+  --m-shift: 8px;
+  --m-slide: 16px;
+  --m-sheet: 24px;
+
+  /* global stacking layers (local stacking inside a component stays 0-3) */
+  --z-composer: 6;
+  --z-strip: 8;
+  --z-peek: 20;
+  --z-peek-scrim: 29;
+  --z-peek-over: 30;
+  --z-scrim: 40;
+  --z-modal: 41;
+  --z-tip: 80;
+  --z-skip: 90;
+
+  /* elevation: only peek, inspector, palette, composer matches */
+  --lift: 0 0 0 1px var(--rule-2), 0 24px 64px -20px rgb(20 20 30 / 0.24);
+  --lift-peek: -24px 0 48px -24px rgb(20 20 30 / 0.2);
+  --lift-sheet: 0 -12px 40px -12px rgb(20 20 30 / 0.25);
+
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --paper: #191919;
+  --side: #141414;
+  --wash: #232323;
+  --rule: #2a2a2a;
+  --rule-2: #383838;
+  --ink: #ececec;
+  --ink-2: #a6a6a6;
+  --ink-3: #8e8e8e;
+  --on-ink: #141414;
+  --accent: #98a4f3;
+  --on-accent: #141414;
+  --accent-wash: rgb(152 164 243 / 0.13);
+  --accent-line: rgb(152 164 243 / 0.4);
+  --stage: #161616;
+  --stage-dot: #2a2a2a;
+  --scrim: rgb(0 0 0 / 0.45);
+  --sheen: rgb(255 255 255 / 0.06);
+  --gloss: rgb(255 255 255 / 0.35);
+
+  --mat-glass: #202020;
+  --mat-leather: #8a6a4c;
+  --mat-metal: #9c8150;
+  --mat-wax: #2e2b26;
+  --mat-wood: #5c4c3a;
+  --mat-paper: #222222;
+
+  --t-planned: #8e8e8e;
+  --t-performed: #a9b6c6;
+  --t-claimed: #d9a648;
+  --t-verified: #5bbd8f;
+  --t-founder: #c29be8;
+  --t-failed: #e8776b;
+
+  --lift: 0 0 0 1px var(--rule-2), 0 24px 64px -20px rgb(0 0 0 / 0.6);
+  --lift-peek: -24px 0 48px -24px rgb(0 0 0 / 0.5);
+  --lift-sheet: 0 -12px 40px -12px rgb(0 0 0 / 0.6);
+
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fast: 1ms;
+    --base: 1ms;
+    --slow: 1ms;
+  }
+}

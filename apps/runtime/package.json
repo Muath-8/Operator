@@ -1,0 +1,32 @@
+{
+  "name": "@lo/runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./inngest": "./src/inngest.ts",
+    "./provider-storage": "./src/provider-storage.ts",
+    "./provider-tools": "./src/provider-tools.ts",
+    "./webhooks": "./src/webhooks.ts",
+    "./telemetry": "./src/telemetry.ts",
+    "./accounts": "./src/accounts.ts",
+    "./notifications": "./src/notification-service.ts",
+    "./fx": "./src/fx.ts",
+    "./local": "./src/local/index.ts",
+    "./local-paypal": "./src/local-paypal.ts"
+  },
+  "dependencies": {
+    "@lo/adapters": "workspace:*",
+    "@lo/policy": "workspace:*",
+    "@lo/state": "workspace:*",
+    "@openai/agents": "0.21.0",
+    "@sentry/node": "11.12.0",
+    "fflate": "0.8.2",
+    "inngest": "4.26.2",
+    "openai": "7.55.0",
+    "pg": "8.23.1",
+    "saxes": "6.0.0",
+    "zod": "4.6.7"
+  }
+}

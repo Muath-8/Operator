@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: launch-operator-voice
+    runtime: docker
+    dockerfilePath: ./deploy/Dockerfile.voice
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: off
+    envVars:
+      - key: LO_EXECUTION_MODE
+        value: sandbox
+      - key: VOICE_HOST
+        value: 0.0.0.0
+      - key: PROVIDER_ENCRYPTION_KEY
+        sync: false
+      - key: VOICE_INTERNAL_SECRET
+        sync: false
+      - key: DATABASE_VOICE_URL
+        sync: false
+      - key: WEBHOOK_ORIGIN
+        sync: false
+      - key: VOICE_PUBLIC_URL
+        sync: false
+      - key: MODEL_REALTIME
+        sync: false
+      - key: APP_ORIGIN
+        sync: false
+      - fromGroup: launch-operator-runtime

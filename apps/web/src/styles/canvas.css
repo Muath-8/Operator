@@ -1,0 +1,596 @@
+/* Canvas engine (inside the peek) and technical plates. */
+.cv {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: none;
+  background-color: var(--stage);
+  background-image: radial-gradient(var(--stage-dot) var(--grid-dot), transparent var(--grid-dot-fade));
+  background-size: var(--grid) var(--grid);
+  cursor: default;
+}
+.cv.grabbing {
+  cursor: grabbing;
+}
+.cv.pinning .frame {
+  cursor: crosshair;
+}
+.world {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+  direction: ltr;
+}
+.world.pending {
+  visibility: hidden;
+}
+.world.anim {
+  transition: transform var(--slow) var(--ease);
+}
+.frame {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  background: var(--paper);
+  border: var(--stroke) solid var(--rule);
+  border-radius: var(--r-mark);
+  text-align: start;
+}
+[dir='rtl'] .frame .fbody {
+  direction: rtl;
+}
+.frame.sel,
+.frame:focus-visible,
+.frame:has(.fsel:focus-visible) {
+  outline: none;
+  box-shadow: 0 0 0 calc(var(--stroke-2) * var(--iz, 1)) var(--accent);
+}
+.frame.flash {
+  animation: fflash var(--flash) var(--ease);
+}
+@keyframes fflash {
+  0% {
+    box-shadow: 0 0 0 calc(var(--ring-flash) * var(--iz, 1)) var(--accent-wash);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.frame.stale {
+  border-style: dashed;
+}
+.flabel {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-end: 100%;
+  transform-origin: 0 100%;
+  transform: scale(var(--iz, 1));
+  padding-block-end: var(--sp-15);
+  display: block;
+  max-inline-size: calc(100% / var(--iz, 1));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--f1);
+  line-height: var(--lh-label);
+  color: var(--ink-3);
+  pointer-events: none;
+}
+.flabel b {
+  font-weight: var(--w-medium);
+  color: var(--ink-2);
+  margin-inline-end: var(--sp-2);
+}
+.frame.sel .flabel b {
+  color: var(--accent);
+}
+.flabel .st {
+  color: var(--t-claimed);
+}
+.fsel {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: var(--r-mark);
+}
+.fsel:focus-visible {
+  outline: none;
+}
+.fbody {
+  padding: var(--sp-5);
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+.fbody :is(button, a, input, [tabindex='0'], .term, .tm) {
+  pointer-events: auto;
+}
+.pin {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: 0;
+  transform: translate(50%, -50%) scale(var(--iz, 1));
+  inline-size: var(--g-chip);
+  block-size: var(--g-chip);
+  border-radius: 50% 50% 50% var(--r-chip);
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid;
+  place-items: center;
+  font-size: var(--f1);
+  font-weight: var(--w-strong);
+  box-shadow: 0 0 0 var(--stroke-2) var(--paper);
+  z-index: 2;
+}
+.pin.done {
+  background: var(--paper);
+  color: var(--t-verified);
+  box-shadow: 0 0 0 var(--stroke) var(--rule-2);
+}
+.pin .ico {
+  inline-size: var(--glyph);
+  block-size: var(--glyph);
+}
+.cpin {
+  position: absolute;
+  transform: translate(-50%, -100%) scale(var(--iz, 1));
+  transform-origin: 50% 100%;
+  inline-size: var(--g-pin-sm);
+  block-size: var(--g-pin-sm);
+  border-radius: 50% 50% 50% 0;
+  background: var(--ink);
+  color: var(--on-ink);
+  display: grid;
+  place-items: center;
+  font-size: var(--f1);
+  z-index: 2;
+}
+.cpin.resolved {
+  background: var(--paper);
+  color: var(--ink-3);
+  box-shadow: 0 0 0 var(--stroke) var(--rule-2);
+}
+.zchip {
+  position: absolute;
+  inset-inline-end: var(--sp-3);
+  inset-block-end: var(--sp-3);
+  display: flex;
+  align-items: center;
+  background: var(--paper);
+  border-radius: var(--r-block);
+  box-shadow: var(--lift);
+  block-size: var(--control);
+  padding-inline: var(--sp-05);
+  opacity: 0;
+  transition: opacity var(--base) var(--ease);
+}
+.cv.touched .zchip,
+.zchip:focus-within {
+  opacity: 1;
+}
+.zchip button {
+  inline-size: var(--control-sm);
+  block-size: var(--control-sm);
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-btn);
+  color: var(--ink-2);
+  font-size: var(--f1);
+}
+.zchip button:hover {
+  background: var(--wash);
+  color: var(--ink);
+}
+.zchip .pct {
+  inline-size: var(--g-zoom-readout);
+  text-align: center;
+  font-size: var(--f1);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.insp {
+  position: absolute;
+  inset-block: var(--sp-3);
+  inset-inline-end: var(--sp-3);
+  inline-size: var(--inspector);
+  background: var(--paper);
+  border-radius: var(--r-block);
+  box-shadow: var(--lift);
+  display: flex;
+  flex-direction: column;
+  z-index: 3;
+  animation: insp-in var(--base) var(--ease);
+}
+@keyframes insp-in {
+  from {
+    transform: translateX(var(--m-slide));
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+[dir='rtl'] .insp {
+  animation-name: insp-in-rtl;
+}
+@keyframes insp-in-rtl {
+  from {
+    transform: translateX(calc(var(--m-slide) * -1));
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.insp .ih {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4);
+  border-block-end: var(--stroke) solid var(--rule);
+  font-weight: var(--w-medium);
+}
+.insp .ih h2 {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font: var(--w-medium) var(--f2) / 1.4 var(--sans);
+  letter-spacing: 0;
+}
+.insp .ib2 {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-4);
+  font-size: var(--f1);
+  color: var(--ink-2);
+}
+.insp h3 {
+  font: var(--w-medium) var(--f1) / var(--lh-label) var(--sans);
+  color: var(--ink);
+  margin: var(--sp-5) 0 var(--sp-2);
+}
+.insp h3:first-child {
+  margin-block-start: 0;
+}
+.insp ul {
+  list-style: none;
+}
+.insp li {
+  display: flex;
+  gap: var(--sp-2);
+  padding-block: var(--sp-1);
+  align-items: baseline;
+}
+.insp li .v {
+  font-weight: var(--w-medium);
+  color: var(--ink);
+  min-inline-size: var(--g-chip);
+}
+.insp li.cur .v {
+  color: var(--accent);
+}
+.insp form {
+  display: flex;
+  gap: var(--sp-15);
+  margin-block-start: var(--sp-2);
+  flex-wrap: wrap;
+}
+.insp input {
+  flex: 1;
+  min-inline-size: 0;
+  block-size: var(--control-sm);
+  border: var(--stroke) solid var(--rule-2);
+  border-radius: var(--r-btn);
+  padding-inline: var(--sp-2);
+  font-size: var(--f1);
+  outline: 0;
+  background: var(--paper);
+}
+.insp input:focus {
+  border-color: var(--accent);
+}
+.insp .ia {
+  padding: var(--sp-3) var(--sp-4);
+  border-block-start: var(--stroke) solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-15);
+}
+.cv-list {
+  list-style: none;
+}
+
+/* shelf frame: plates side by side on one floor */
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr));
+  gap: 0 var(--sp-5);
+  position: relative;
+}
+.shelf::before {
+  content: '';
+  position: absolute;
+  inset-inline: calc(var(--sp-5) * -1);
+  inset-block-start: calc(var(--arth) - var(--g-shelf-lift));
+  block-size: var(--g-hair);
+  background: var(--ink);
+  opacity: 0.18;
+}
+.shelf .col {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  border-radius: var(--r-btn);
+  padding: var(--sp-2);
+  margin: calc(var(--sp-2) * -1);
+  transition: background var(--fast) var(--ease);
+  position: relative;
+}
+.shelf .col:hover,
+.shelf .col.sel {
+  background: var(--side);
+}
+.shelf .colbtn {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-btn);
+}
+.shelf .col > :not(.colbtn) {
+  position: relative;
+  pointer-events: none;
+}
+.shelf .col .tm {
+  pointer-events: auto;
+}
+.shelf .tag {
+  block-size: var(--sp-4);
+  font-size: var(--f1);
+  font-weight: var(--w-medium);
+  color: var(--accent);
+}
+.shelf .art {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-block-size: var(--arth, var(--g-shelf-art));
+}
+.shelf .sup {
+  font-weight: var(--w-medium);
+  font-size: var(--f2);
+  margin-block-start: var(--sp-3);
+}
+.shelf .loc {
+  font-size: var(--f1);
+  color: var(--ink-3);
+}
+.shelf .px {
+  font: var(--w-medium) var(--f5) / 1.1 var(--serif);
+  font-variant-numeric: lining-nums tabular-nums;
+  margin-block-start: var(--sp-2);
+  display: flex;
+  align-items: center;
+}
+.shelf .px small {
+  font: var(--w-regular) var(--f1) / 1 var(--sans);
+  color: var(--ink-3);
+  margin-inline-start: var(--sp-1);
+  align-self: flex-end;
+  padding-block-end: var(--sp-075);
+}
+.moq {
+  block-size: var(--g-dot);
+  background: var(--wash);
+  border-radius: var(--r-mark);
+  position: relative;
+  margin: var(--sp-3) 0 var(--sp-15);
+}
+.moq i {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  border-radius: var(--r-mark);
+  background: var(--ink);
+}
+.moq i.over {
+  background: repeating-linear-gradient(135deg, var(--t-claimed) 0 var(--hatch), transparent var(--hatch) var(--hatch-gap));
+  border-radius: 0 var(--r-mark) var(--r-mark) 0;
+}
+.moq .lim {
+  position: absolute;
+  inset-block: calc(var(--sp-1) * -1);
+  inline-size: var(--g-tick);
+  background: var(--accent);
+}
+.shelf .cpt {
+  font-size: var(--f1);
+  color: var(--ink-2);
+}
+.shelf .cpt.warning {
+  color: var(--t-claimed);
+}
+
+/* identity frames */
+.dir .art2 {
+  block-size: var(--g-direction-art);
+  border-radius: var(--r-chip);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  position: relative;
+  overflow: hidden;
+  transition: background var(--slow) var(--ease);
+}
+.dir .wm {
+  font-size: var(--f5);
+  letter-spacing: var(--track-mark);
+}
+.dir .wm.serif {
+  font-family: var(--serif);
+}
+.dir .wm.sans {
+  font-family: var(--sans);
+}
+.dir .wm-alt {
+  font-family: var(--arabic);
+  font-size: var(--f4);
+  opacity: 0.85;
+}
+.dir .fn {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-block-start: var(--sp-35);
+  gap: var(--sp-2);
+}
+.dir .fn b {
+  font-weight: var(--w-medium);
+  font-size: var(--f2);
+}
+.dir .fn small {
+  font-size: var(--f1);
+  color: var(--ink-2);
+}
+.dir .pos {
+  font: var(--w-regular) var(--f2) / 1.5 var(--serif);
+  margin-block-start: var(--sp-15);
+  unicode-bidi: plaintext;
+}
+.sw {
+  display: flex;
+  margin-block-start: var(--sp-3);
+  border-radius: var(--r-chip);
+  overflow: hidden;
+  block-size: var(--sp-4);
+  list-style: none;
+}
+.sw li {
+  flex: 1;
+}
+.vers {
+  display: flex;
+  gap: var(--sp-1);
+  margin-block-start: var(--sp-25);
+  flex-wrap: wrap;
+}
+.vers span {
+  font-size: var(--f1);
+  block-size: var(--g-pin-sm);
+  padding-inline: var(--sp-2);
+  border-radius: var(--r-pill);
+  color: var(--ink-2);
+  box-shadow: inset 0 0 0 var(--stroke) var(--rule);
+  display: inline-flex;
+  align-items: center;
+}
+.vers span.cur {
+  box-shadow: inset 0 0 0 var(--stroke) var(--ink);
+  color: var(--ink);
+}
+.vers span.new {
+  box-shadow: inset 0 0 0 var(--stroke) var(--accent);
+  color: var(--accent);
+}
+.choices-row {
+  display: flex;
+  justify-content: space-around;
+  padding-block: var(--sp-2);
+  gap: var(--sp-4);
+}
+.choices-row figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--f1);
+  color: var(--ink-2);
+}
+.plates-frame {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--sp-8);
+  padding-block: var(--sp-3) var(--sp-1);
+}
+.frame-cap {
+  font-size: var(--f1);
+  color: var(--ink-2);
+  margin-block-start: var(--sp-2);
+}
+
+/* plates: stroke 1.25 ink; dimension lines ink-3; recommended alone in accent */
+.plate {
+  overflow: visible;
+  direction: ltr;
+}
+.plate .pm {
+  stroke: var(--ink);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+.plate .glass {
+  fill: var(--mat-glass);
+}
+.plate .solid {
+  fill: var(--ink);
+}
+.plate .metal {
+  fill: var(--mat-metal);
+}
+.plate .leather {
+  fill: var(--mat-leather);
+}
+.plate .wax {
+  fill: var(--mat-wax);
+}
+.plate .wood {
+  fill: var(--mat-wood);
+}
+.plate .paper {
+  fill: var(--mat-paper);
+}
+.plate .ghost {
+  fill: none;
+  stroke-dasharray: 3 3;
+  stroke: var(--ink-3);
+}
+.plate .void {
+  fill: var(--paper);
+}
+.plate .hint {
+  fill: none;
+  stroke: var(--ink);
+  opacity: 0.25;
+}
+.plate .gloss {
+  fill: var(--gloss);
+  stroke: none;
+}
+.plate .dim {
+  stroke: var(--ink-3);
+  stroke-width: 1;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+.plate .dimt {
+  fill: var(--ink-3);
+  font: var(--w-regular) var(--f1) var(--sans);
+}
+.plate .ptext {
+  font-family: var(--serif);
+}
+.plate .ptext.ar {
+  font-family: var(--arabic);
+}
+.plate.rec .pm {
+  stroke: var(--accent);
+}
+.plate .ink-fill {
+  fill: var(--ink);
+}

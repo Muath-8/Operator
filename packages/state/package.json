@@ -1,0 +1,22 @@
+{
+  "name": "@lo/state",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./stream": "./src/stream.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:database": "vitest run test/database.test.ts"
+  },
+  "dependencies": {
+    "zod": "4.6.7",
+    "pg": "8.23.1"
+  },
+  "devDependencies": {
+    "@types/pg": "8.15.4"
+  }
+}

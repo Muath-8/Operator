@@ -1,0 +1,91 @@
+{
+  "name": "launch-operator",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.12.4",
+  "engines": {
+    "node": ">=22.17.0"
+  },
+  "scripts": {
+    "setup:local": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup-local.ps1",
+    "dev": "pnpm --filter @lo/web dev",
+    "build": "pnpm -r --if-present build",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "playwright test -c apps/web/tests/ui/playwright.config.ts",
+    "dev:inngest": "inngest-cli dev --host 127.0.0.1 --persist --no-discovery -u http://127.0.0.1:3000/api/inngest",
+    "dev:voice": "pnpm --filter @lo/voice dev",
+    "operator:health": "tsx scripts/operator-health.ts",
+    "quality:security": "tsx scripts/quality/security.ts",
+    "quality:traceability": "tsx scripts/quality/traceability.ts",
+    "eval": "tsx packages/evals/src/cli.ts",
+    "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "schema:ui": "node scripts/generate-ui-validator.mjs",
+    "schema:ui:check": "node scripts/generate-ui-validator.mjs --check",
+    "operator:business": "tsx scripts/operator-business.ts",
+    "prepare": "node scripts/generate-ui-validator.mjs",
+    "pretest": "pnpm schema:ui",
+    "pretest:coverage": "pnpm schema:ui",
+    "pretypecheck": "pnpm schema:ui",
+    "lint": "eslint apps packages scripts",
+    "format:check": "prettier --check apps packages scripts eslint.config.mjs vitest.config.ts",
+    "quality:gate": "pnpm typecheck && pnpm lint && pnpm lint:css && pnpm quality:tokens && pnpm quality:copy && pnpm format:check && pnpm quality:security && pnpm quality:traceability && pnpm test:coverage && pnpm test:ui && pnpm build",
+    "lint:css": "stylelint \"apps/web/src/**/*.css\"",
+    "quality:tokens": "node scripts/quality/style-tokens.mjs",
+    "quality:copy": "node scripts/quality/copy-lint.mjs",
+    "operator:provision": "tsx scripts/operator-provision.ts",
+    "operator:backup": "tsx scripts/operator-backup.ts",
+    "operator:restore": "tsx scripts/operator-restore.ts",
+    "operator:retention": "tsx scripts/operator-retention.ts",
+    "operator:knowledge": "tsx scripts/operator-knowledge.ts",
+    "dev:simulator": "tsx scripts/counterparty-simulator.ts",
+    "dev:local": "tsx scripts/dev-local.ts",
+    "dev:local:ai": "tsx scripts/dev-local.ts --ai",
+    "setup:postgres": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup-local.ps1",
+    "test:local": "vitest run --maxWorkers=1 apps/runtime/src/local apps/web/src/lib/local- apps/web/src/lib/sqlite-"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "16.4.6",
+    "@playwright/test": "1.65.0",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "22.15.30",
+    "@types/pg": "8.15.4",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@vitest/coverage-v8": "5.1.0",
+    "axe-core": "4.11.1",
+    "esbuild": "0.28.2",
+    "eslint": "10.14.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "fast-check": "4.10.2",
+    "inngest-cli": "1.52.0",
+    "jsdom": "29.0.2",
+    "prettier": "3.10.1",
+    "stylelint": "18.0.0",
+    "supabase": "3.1.0",
+    "ts-json-schema-generator": "2.4.0",
+    "tsx": "4.20.3",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.2",
+    "vitest": "5.1.0"
+  },
+  "dependencies": {
+    "@openai/agents": "0.21.0",
+    "@supabase/supabase-js": "2.119.0",
+    "inngest": "4.26.2",
+    "pg": "8.23.1",
+    "zod": "4.6.7"
+  },
+  "pnpm": {
+    "overrides": {
+      "@opentelemetry/api": "1.9.0"
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "inngest-cli",
+      "protobufjs"
+    ]
+  }
+}

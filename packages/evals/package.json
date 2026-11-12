@@ -1,0 +1,21 @@
+{
+  "name": "@lo/evals",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "eval:corpus": "tsx src/cli.ts corpus",
+    "eval:run": "tsx src/cli.ts run",
+    "eval:gates": "tsx src/cli.ts gates",
+    "eval:compare": "tsx src/cli.ts compare",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@lo/state": "workspace:*",
+    "@lo/runtime": "workspace:*",
+    "zod": "4.6.7"
+  }
+}

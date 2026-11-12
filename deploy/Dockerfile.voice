@@ -1,0 +1,22 @@
+FROM node:22.17.0-bookworm-slim
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable && corepack prepare pnpm@10.12.4 --activate
+WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/runtime/package.json ./apps/runtime/package.json
+COPY apps/voice/package.json ./apps/voice/package.json
+COPY packages/state/package.json ./packages/state/package.json
+COPY packages/policy/package.json ./packages/policy/package.json
+COPY packages/adapters/package.json ./packages/adapters/package.json
+RUN pnpm install --frozen-lockfile --filter @lo/voice... --prod
+COPY tsconfig.base.json tsconfig.json ./
+COPY apps/runtime ./apps/runtime
+COPY apps/voice ./apps/voice
+COPY packages/state ./packages/state
+COPY packages/policy ./packages/policy
+COPY packages/adapters ./packages/adapters
+ENV NODE_ENV=production VOICE_HOST=0.0.0.0 PORT=8080
+USER node
+EXPOSE 8080
+CMD ["pnpm", "--filter", "@lo/voice", "start"]
